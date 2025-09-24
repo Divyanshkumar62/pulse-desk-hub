@@ -7,25 +7,28 @@ const INACTIVITY_TIMEOUT = 10 * 60 * 1000; // 10 minutes in milliseconds
 
 export const useInactivityReset = () => {
   const dispatch = useDispatch();
-  const { currentUserId } = useSelector((state: RootState) => state.role);
-  const currentUser = useSelector((state: RootState) => 
-    state.members.entities[currentUserId]
-  );
-  
+  const { currentUser } = useSelector((state: RootState) => state.role);
+  const members = useSelector((state: RootState) => state.members.members);
+
+  // Find current user by name match
+  const currentUserMember = members.find(member =>
+    member.name.toLowerCase().includes(currentUser.toLowerCase().split(' ')[0])
+  ) || members[0]; // fallback to first member if not found
+
   const timeoutRef = useRef<NodeJS.Timeout>();
   const lastActivityRef = useRef<number>(Date.now());
 
   const resetTimer = () => {
     lastActivityRef.current = Date.now();
-    
+
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
-    
+
     timeoutRef.current = setTimeout(() => {
-      if (currentUser && currentUser.status !== 'Offline') {
+      if (currentUserMember && currentUserMember.status !== 'Offline') {
         dispatch(updateStatus({
-          id: currentUserId,
+          memberId: currentUserMember.id,
           status: 'Offline'
         }));
       }
@@ -34,7 +37,7 @@ export const useInactivityReset = () => {
 
   useEffect(() => {
     const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
-    
+
     const handleActivity = () => {
       resetTimer();
     };
@@ -46,9 +49,9 @@ export const useInactivityReset = () => {
           clearTimeout(timeoutRef.current);
         }
         timeoutRef.current = setTimeout(() => {
-          if (currentUser && currentUser.status !== 'Offline') {
+          if (currentUserMember && currentUserMember.status !== 'Offline') {
             dispatch(updateStatus({
-              id: currentUserId,
+              memberId: currentUserMember.id,
               status: 'Offline'
             }));
           }
@@ -63,9 +66,9 @@ export const useInactivityReset = () => {
     events.forEach(event => {
       document.addEventListener(event, handleActivity, { passive: true });
     });
-    
+
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    
+
     // Initialize timer
     resetTimer();
 
@@ -74,10 +77,10 @@ export const useInactivityReset = () => {
         document.removeEventListener(event, handleActivity);
       });
       document.removeEventListener('visibilitychange', handleVisibilityChange);
-      
+
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [currentUserId, currentUser, dispatch]);
+  }, [currentUser, currentUserMember, dispatch]);
 };

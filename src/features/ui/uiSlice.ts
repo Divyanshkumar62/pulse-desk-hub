@@ -1,62 +1,27 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { MemberStatus } from '../members/membersSlice';
+import { createSlice } from '@reduxjs/toolkit';
 
 interface UiState {
-  sidebarCollapsed: boolean;
-  memberFilter: MemberStatus | 'all';
-  sortBy: 'name' | 'status' | 'lastActive';
-  sortOrder: 'asc' | 'desc';
-  showTaskModal: boolean;
-  selectedMemberId: string | null;
   darkMode: boolean;
+  sidebarCollapsed: boolean;
 }
 
 const initialState: UiState = {
-  sidebarCollapsed: false,
-  memberFilter: 'all',
-  sortBy: 'name',
-  sortOrder: 'asc',
-  showTaskModal: false,
-  selectedMemberId: null,
   darkMode: false,
+  sidebarCollapsed: false,
 };
 
 const uiSlice = createSlice({
   name: 'ui',
   initialState,
   reducers: {
+    toggleDarkMode: (state) => {
+      state.darkMode = !state.darkMode;
+    },
     toggleSidebar: (state) => {
       state.sidebarCollapsed = !state.sidebarCollapsed;
-    },
-    setMemberFilter: (state, action: PayloadAction<MemberStatus | 'all'>) => {
-      state.memberFilter = action.payload;
-    },
-    setSortBy: (state, action: PayloadAction<'name' | 'status' | 'lastActive'>) => {
-      state.sortBy = action.payload;
-    },
-    setSortOrder: (state, action: PayloadAction<'asc' | 'desc'>) => {
-      state.sortOrder = action.payload;
-    },
-    toggleTaskModal: (state) => {
-      state.showTaskModal = !state.showTaskModal;
-    },
-    setSelectedMember: (state, action: PayloadAction<string | null>) => {
-      state.selectedMemberId = action.payload;
-    },
-    toggleTheme: (state) => {
-      state.darkMode = !state.darkMode;
     },
   },
 });
 
-export const {
-  toggleSidebar,
-  setMemberFilter,
-  setSortBy,
-  setSortOrder,
-  toggleTaskModal,
-  setSelectedMember,
-  toggleTheme,
-} = uiSlice.actions;
-
+export const { toggleDarkMode, toggleSidebar } = uiSlice.actions;
 export default uiSlice.reducer;

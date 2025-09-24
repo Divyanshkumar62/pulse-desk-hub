@@ -1,29 +1,27 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export type UserRole = 'teamLead' | 'teamMember';
-
 interface RoleState {
-  currentRole: UserRole;
-  currentUserId: string;
+  currentRole: 'member' | 'lead';
+  currentUser: string;
 }
 
 const initialState: RoleState = {
-  currentRole: 'teamLead',
-  currentUserId: 'current-user-id',
+  currentRole: 'member',
+  currentUser: 'User',
 };
 
 const roleSlice = createSlice({
   name: 'role',
   initialState,
   reducers: {
-    toggleRole: (state) => {
-      state.currentRole = state.currentRole === 'teamLead' ? 'teamMember' : 'teamLead';
+    switchRole: (state, action: PayloadAction<'member' | 'lead'>) => {
+      state.currentRole = action.payload;
     },
-    setCurrentUser: (state, action: PayloadAction<string>) => {
-      state.currentUserId = action.payload;
+    setUser: (state, action: PayloadAction<string>) => {
+      state.currentUser = action.payload;
     },
   },
 });
 
-export const { toggleRole, setCurrentUser } = roleSlice.actions;
+export const { switchRole, setUser } = roleSlice.actions;
 export default roleSlice.reducer;

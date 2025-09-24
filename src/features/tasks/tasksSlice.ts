@@ -1,80 +1,43 @@
-import { createSlice, createEntityAdapter, PayloadAction } from '@reduxjs/toolkit';
-import { nanoid } from 'nanoid';
-import { RootState } from '../../app/store';
-
-export type TaskStatus = 'active' | 'done';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface Task {
   id: string;
+  memberId: string;
   title: string;
-  assignedTo: string;
   dueDate: string;
-  progress: number; // 0-100
-  createdAt: number;
-  status: TaskStatus;
+  completed: boolean;
+  progress: number;
 }
 
-const tasksAdapter = createEntityAdapter<Task>();
-
-interface CreateTaskPayload {
-  title: string;
-  assignedTo: string;
-  dueDate: string;
-}
+const initialState: Task[] = [];
 
 const tasksSlice = createSlice({
   name: 'tasks',
-  initialState: tasksAdapter.getInitialState(),
+  initialState,
   reducers: {
-    addTask: {
-      reducer: (state, action: PayloadAction<Task>) => {
-        tasksAdapter.addOne(state, action.payload);
-      },
-      prepare: (payload: CreateTaskPayload) => ({
-        payload: {
-          id: nanoid(),
-          ...payload,
-          progress: 0,
-          createdAt: Date.now(),
-          status: 'active' as TaskStatus,
-        },
-      }),
+    addTask: (state, action: PayloadAction<{ memberId: string; title: string; dueDate: string }>) => {
+      const id = Date.now().toString();
+      state.push({
+        id,
+        ...action.payload,
+        completed: false,
+        progress: 0,
+      });
     },
-    updateTask: (state, action: PayloadAction<{ id: string; changes: Partial<Task> }>) => {
-      tasksAdapter.updateOne(state, action.payload);
-    },
-    updateTaskProgress: (state, action: PayloadAction<{ id: string; delta: number }>) => {
-      const task = state.entities[action.payload.id];
+    toggleTaskComplete: (state, action: PayloadAction<{ taskId: string }>) => {
+      const task = state.find(t => t.id === action.payload.taskId);
       if (task) {
-        task.progress = Math.max(0, Math.min(100, task.progress + action.payload.delta));
-        if (task.progress === 100) {
-          task.status = 'done';
-        } else if (task.status === 'done') {
-          task.status = 'active';
-        }
+        task.completed = !task.completed;
       }
     },
-    removeTask: (state, action: PayloadAction<string>) => {
-      tasksAdapter.removeOne(state, action.payload);
+    updateProgress: (state, action: PayloadAction<{ taskId: string; progress: number }>) => {
+      const task = state.find(t => t.id === action.payload.taskId);
+      if (task) {
+        task.progress = action.payload.progress;
+      }
     },
   },
 });
 
-export const { addTask, updateTask, updateTaskProgress, removeTask } = tasksSlice.actions;
-
-// Selectors
-export const {
-  selectAll: selectAllTasks,
-  selectById: selectTaskById,
-  selectIds: selectTaskIds,
-} = tasksAdapter.getSelectors((state: RootState) => state.tasks);
-
-export const selectTasksForMember = (memberId: string) => (state: RootState) => {
-  return selectAllTasks(state).filter(task => task.assignedTo === memberId);
-};
-
-export const selectActiveTasks = (state: RootState) => {
-  return selectAllTasks(state).filter(task => task.status === 'active');
-};
-
+export const { addTask, toggleTaskComplete, updateProgress } = tasksSlice.actions;
 export default tasksSlice.reducer;
