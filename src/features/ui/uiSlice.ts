@@ -8,6 +8,7 @@ interface UiState {
   sortOrder: 'asc' | 'desc';
   showTaskModal: boolean;
   selectedMemberId: string | null;
+  darkMode: boolean;
 }
 
 const initialState: UiState = {
@@ -17,6 +18,7 @@ const initialState: UiState = {
   sortOrder: 'asc',
   showTaskModal: false,
   selectedMemberId: null,
+  darkMode: false,
 };
 
 const uiSlice = createSlice({
@@ -41,6 +43,9 @@ const uiSlice = createSlice({
     setSelectedMember: (state, action: PayloadAction<string | null>) => {
       state.selectedMemberId = action.payload;
     },
+    toggleTheme: (state) => {
+      state.darkMode = !state.darkMode;
+    },
   },
 });
 
@@ -51,6 +56,7 @@ export const {
   setSortOrder,
   toggleTaskModal,
   setSelectedMember,
+  toggleTheme,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

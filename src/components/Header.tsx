@@ -6,11 +6,13 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Switch } from './ui/switch';
-import { Plus, Bell } from 'lucide-react';
+import { Plus, Bell, Moon, Sun } from 'lucide-react';
+import { useTheme } from '../hooks/useTheme';
 
 const Header = () => {
   const dispatch = useDispatch();
   const { currentRole } = useSelector((state: RootState) => state.role);
+  const { darkMode, toggle: toggleTheme } = useTheme();
 
   return (
     <header className="bg-card border-b border-dashboard-border px-6 py-4 flex items-center justify-between">
@@ -41,6 +43,10 @@ const Header = () => {
           </Button>
         )}
 
+        <Button variant="ghost" size="icon" onClick={toggleTheme}>
+          {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+        </Button>
+        
         <Button variant="ghost" size="icon">
           <Bell className="h-5 w-5" />
         </Button>

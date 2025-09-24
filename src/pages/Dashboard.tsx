@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../app/store';
 import { fetchMembers } from '../features/members/membersSlice';
+import { useInactivityReset } from '../hooks/useInactivityReset';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import DashboardContent from '../components/DashboardContent';
@@ -10,6 +11,9 @@ const Dashboard = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { loading } = useSelector((state: RootState) => state.members);
   const { sidebarCollapsed } = useSelector((state: RootState) => state.ui);
+  
+  // Initialize inactivity reset
+  useInactivityReset();
 
   useEffect(() => {
     if (loading === 'idle') {
