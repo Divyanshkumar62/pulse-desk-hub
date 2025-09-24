@@ -57,6 +57,18 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        dashboard: {
+          sidebar: "hsl(var(--dashboard-sidebar))",
+          "sidebar-foreground": "hsl(var(--dashboard-sidebar-foreground))",
+          "sidebar-hover": "hsl(var(--dashboard-sidebar-hover))",
+          border: "hsl(var(--dashboard-border))",
+        },
+        status: {
+          working: "hsl(var(--status-working))",
+          break: "hsl(var(--status-break))",
+          meeting: "hsl(var(--status-meeting))",
+          offline: "hsl(var(--status-offline))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
