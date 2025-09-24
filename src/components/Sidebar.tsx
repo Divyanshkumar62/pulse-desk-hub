@@ -1,43 +1,55 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../app/store';
-import { toggleSidebar } from '../features/ui/uiSlice';
-import { Button } from './ui/button';
-import { 
-  LayoutDashboard, 
-  Users, 
-  CheckSquare, 
-  Settings, 
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../app/store";
+import { toggleSidebar } from "../features/ui/uiSlice";
+import { Button } from "./ui/button";
+import {
+  LayoutDashboard,
+  Users,
+  CheckSquare,
+  Settings,
   Menu,
   BarChart3,
   Calendar,
-  MessageSquare
-} from 'lucide-react';
+  MessageSquare,
+} from "lucide-react";
 
-const Sidebar = () => {
+interface SidebarProps {
+  mobileOverlay?: boolean;
+}
+
+const Sidebar = ({ mobileOverlay = false }: SidebarProps) => {
   const dispatch = useDispatch();
   const { sidebarCollapsed } = useSelector((state: RootState) => state.ui);
 
   const menuItems = [
-    { icon: LayoutDashboard, label: 'Dashboard', active: true },
-    { icon: Users, label: 'Team Members', active: false },
-    { icon: CheckSquare, label: 'Tasks', active: false },
-    { icon: BarChart3, label: 'Analytics', active: false },
-    { icon: Calendar, label: 'Schedule', active: false },
-    { icon: MessageSquare, label: 'Messages', active: false },
-    { icon: Settings, label: 'Settings', active: false },
+    { icon: LayoutDashboard, label: "Dashboard", active: true },
+    { icon: Users, label: "Team Members", active: false },
+    { icon: CheckSquare, label: "Tasks", active: false },
+    { icon: BarChart3, label: "Analytics", active: false },
+    { icon: Calendar, label: "Schedule", active: false },
+    { icon: MessageSquare, label: "Messages", active: false },
+    { icon: Settings, label: "Settings", active: false },
   ];
 
   return (
-    <div className={`fixed left-0 top-0 h-full bg-dashboard-sidebar border-r border-dashboard-border transition-all duration-300 z-20 ${
-      sidebarCollapsed ? 'w-16' : 'w-64'
-    }`}>
+    <div
+      className={`$
+        mobileOverlay ? "relative" : "fixed"
+      } left-0 top-0 h-full bg-dashboard-sidebar border-r border-dashboard-border transition-all duration-300 z-20 ${
+        sidebarCollapsed ? "w-16" : "w-64"
+      }`}
+    >
       <div className="flex items-center justify-between p-4 border-b border-dashboard-border">
         {!sidebarCollapsed && (
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">TP</span>
+              <span className="text-primary-foreground font-bold text-sm">
+                TP
+              </span>
             </div>
-            <span className="text-dashboard-sidebar-foreground font-semibold text-lg">TeamPulse</span>
+            <span className="text-dashboard-sidebar-foreground font-semibold text-lg">
+              TeamPulse
+            </span>
           </div>
         )}
         <Button
@@ -57,10 +69,14 @@ const Sidebar = () => {
               <Button
                 variant="ghost"
                 className={`w-full justify-start text-dashboard-sidebar-foreground hover:bg-dashboard-sidebar-hover ${
-                  item.active ? 'bg-primary text-primary-foreground hover:bg-primary/90' : ''
-                } ${sidebarCollapsed ? 'px-2' : 'px-3'}`}
+                  item.active
+                    ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                    : ""
+                } ${sidebarCollapsed ? "px-2" : "px-3"}`}
               >
-                <item.icon className={`h-5 w-5 ${sidebarCollapsed ? '' : 'mr-3'}`} />
+                <item.icon
+                  className={`h-5 w-5 ${sidebarCollapsed ? "" : "mr-3"}`}
+                />
                 {!sidebarCollapsed && <span>{item.label}</span>}
               </Button>
             </li>

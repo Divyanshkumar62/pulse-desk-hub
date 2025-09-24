@@ -1,20 +1,24 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../app/store';
-import { switchRole } from '../features/role/roleSlice';
-import { toggleDarkMode, toggleSidebar } from '../features/ui/uiSlice';
-import { Button } from './ui/button';
-import { Badge } from './ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { Input } from './ui/input';
-import { Bell, Search, Settings, Menu } from 'lucide-react';
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../app/store";
+import { switchRole } from "../features/role/roleSlice";
+import { toggleDarkMode, toggleSidebar } from "../features/ui/uiSlice";
+import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Input } from "./ui/input";
+import { Bell, Search, Settings, Menu } from "lucide-react";
 
 const Header = () => {
   const dispatch = useDispatch();
-  const { currentRole, currentUser } = useSelector((state: RootState) => state.role);
-  const { darkMode, sidebarCollapsed } = useSelector((state: RootState) => state.ui);
+  const { currentRole, currentUser } = useSelector(
+    (state: RootState) => state.role
+  );
+  const { darkMode, sidebarCollapsed } = useSelector(
+    (state: RootState) => state.ui
+  );
 
   const handleToggleRole = () => {
-    const newRole = currentRole === 'member' ? 'lead' : 'member';
+    const newRole = currentRole === "member" ? "lead" : "member";
     dispatch(switchRole(newRole));
   };
 
@@ -33,11 +37,11 @@ const Header = () => {
       </div>
 
       <div className="flex items-center space-x-4">
-        <Button variant="ghost" size="icon" className="text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">
-          <Settings className="h-5 w-5" />
-        </Button>
-
-        <Button variant="ghost" size="icon" className="text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 relative">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 relative"
+        >
           <Bell className="h-5 w-5" />
           <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full text-xs"></span>
         </Button>
@@ -45,16 +49,25 @@ const Header = () => {
         <div className="flex items-center space-x-3">
           <Avatar className="h-8 w-8">
             <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback className="bg-blue-600 text-white">JD</AvatarFallback>
+            <AvatarFallback className="bg-blue-600 text-white">
+              JD
+            </AvatarFallback>
           </Avatar>
           <div className="hidden md:block">
-            <p className="text-sm font-medium text-gray-900 dark:text-gray-100">John Doe</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">Administrator</p>
+            <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+              John Doe
+            </p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              Administrator
+            </p>
           </div>
         </div>
 
-        <Button onClick={handleToggleRole} className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800">
-          Switch to {currentRole === 'member' ? 'Team Lead' : 'Team Member'}
+        <Button
+          onClick={handleToggleRole}
+          className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800"
+        >
+          Switch to {currentRole === "member" ? "Team Lead" : "Team Member"}
         </Button>
 
         <Button
@@ -62,7 +75,7 @@ const Header = () => {
           variant="outline"
           className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300"
         >
-          {darkMode ? 'Light Mode' : 'Dark Mode'}
+          {darkMode ? "Light Mode" : "Dark Mode"}
         </Button>
       </div>
     </header>
