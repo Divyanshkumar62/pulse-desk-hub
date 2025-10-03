@@ -130,14 +130,6 @@ npm run preview
 - Adjust task progress in 10% increments
 - Monitor personal productivity
 
-## 🎨 Design System
-
-The application uses a custom design system built with Tailwind CSS:
-- **Semantic tokens** for consistent theming
-- **Professional blue/gray** color palette
-- **Status-specific colors** for visual clarity
-- **Responsive grid layouts** with clean cards
-- **Dark mode support** with proper contrast ratios
 
 ## 🔧 State Management
 
